@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glowing Cursor</title>
+  <style>
+    /* Dark theme background */
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      cursor: none; /* Hide default cursor */
+    }
+
+    /* Glowing cursor effect */
+    .cursor {
+      position: absolute;
+      width: 200px; /* Cursor radius */
+      height: 200px;
+      background-color: rgba(0, 255, 204, 0.2); /* Semi-transparent glow */
+      border-radius: 50%;
+      pointer-events: none;
+      box-shadow: 0 0 30px 20px rgba(0, 255, 204, 0.5);
+      transform: translate(-50%, -50%);
+    }
+
+    /* Centered text */
+    .content {
+      text-align: center;
+      position: relative;
+    }
+
+    .content h1, .content p {
+      font-size: 2.5rem;
+      margin: 0;
+      color: transparent; /* Make text invisible */
+      background-clip: text;
+      -webkit-background-clip: text;
+      transition: background-position 0.1s ease; /* Smooth transition */
+    }
+
+    .content p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+
+    /* Add a gradient mask to simulate the flashlight effect */
+    .content h1, .content p {
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 50%);
+      background-size: 200px 200px; /* Match cursor size */
+      background-repeat: no-repeat;
+      background-position: -9999px -9999px; /* Start off-screen */
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="content">
+    <h1>Welcome to the Dark Theme</h1>
+    <p>Move your mouse to reveal the text!</p>
+  </div>
+
+  <script>
+    // JavaScript to move the glowing cursor
+    const cursor = document.getElementById('cursor');
+    const textElements = document.querySelectorAll('.content h1, .content p');
+
+    document.addEventListener('mousemove', (e) => {
+      // Move the glowing cursor
+      cursor.style.left = `${e.pageX}px`;
+      cursor.style.top = `${e.pageY}px`;
+
+      // Update the background position of the text to match the cursor
+      textElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left - 100; // Adjust by half the cursor size (200px / 2)
+        const y = e.clientY - rect.top - 100; // Adjust by half the cursor size (200px / 2)
+        el.style.backgroundPosition = `${x}px ${y}px`;
+      });
+    });
+  </script>
+</body>
+</html>
